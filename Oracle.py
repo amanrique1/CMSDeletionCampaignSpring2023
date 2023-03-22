@@ -5,35 +5,27 @@ class Oracle:
     cursor = None
     conn = None
 
-    def __init__(self):
-        host = 'localhost'
-        port = 1521
-        dbname = 'xe'
-        username = 'system'
-        password = 'oracle'
-        dsn = cx_Oracle.makedsn(
-            secretDict['host'],
-            secretDict['port'],
-            service_name=secretDict['dbname']
-        )
+    def __init__(self,host,port,service,username,password):
+        dsn = cx_Oracle.makedsn(host,port,service_name= service)
 
         self.conn = cx_Oracle.connect(
-            user=secretDict['username'],
-            password=secretDict['password'],
+            user=username,
+            password=password,
             dsn=dsn
         )
         self.conn.autocommit = True
         self.cursor = self.conn.cursor()
 
-    def consulta(self, query, with_df=True):
+    def query(self, query, with_df=True):
         self.cursor.execute(query)
         if with_df:
             result = self.cursor.fetchall()
-            col_names = []
-            for elt in self.cursor.description:
-                col_names.append(elt[0])
+            cols = [i[0] for i in self.cursor.description]
+            df = pd.DataFrame(result, columns=cols)
 
-            df = pd.DataFrame(result, columns=col_names)
+            for col in self.cursor.description:
+                if col[1] == cx_Oracle.DB_TYPE_RAW:
+                    df[col[0]] = df[col[0]].apply(lambda x: x.hex() if x!=None else None)
             return(df)
         else:
             return None
