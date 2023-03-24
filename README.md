@@ -7,7 +7,7 @@ Basically the process for this Deletion Campaign is:
 1. CMS Datasets Identification
 2. Rules matching Information
    - [Deletion information](deletion_rules_spring2023.csv): Dataset, Rule_id, RSE, RSE_TYPE, FILES_NUMBER, FILES_SIZE
-   - Space Usage to free [here](DeletionCampaignStats)
+   - Space Usage to free [here](DeletionCampaignStats.pdf)
 3. List Orphan Tape Replicas: replicas that doesn’t have rules and will be deleted because of the deletion mode
 4. Deletion dataset discussion: share the deletion information with owners and wait for confirmation
 5. Disk Deletion
